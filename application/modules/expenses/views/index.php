@@ -199,6 +199,7 @@ $(document).ready(function(){
 			id: $(this).attr("data-src")
 			}
 			}).done(function(data) {
+
 			$("#nameModal_expenses").find(".modal-body").html(data);
 			$("#nameModal_expenses").modal("show"); 
 		})

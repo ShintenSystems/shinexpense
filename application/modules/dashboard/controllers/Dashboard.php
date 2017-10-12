@@ -29,7 +29,32 @@ class Dashboard extends CI_Controller {
 		}
   	}
 
-	
+  	public function get_total_value() {
+        	//$data['Dashdata']= $this->Dashboard_model->Get_total_received_amt();
+  		   	$mydata["view_data_income"]= $this->Dashboard_model->Get_total_received_amt();
+			$mydata["view_data_expense"]= $this->Dashboard_model->Get_total_spent_amt();
+			//$data["view_data_balance"]= $data["view_data_income"]->amount_received - $data["view_data_expense"]->amount_spent;
+
+			if($mydata["view_data_income"]->amount_received != null) {
+			$data[0] = $mydata["view_data_income"]->amount_received;
+		    } else {
+		    	$data[0] = 0;
+		    }
+
+		    if($mydata["view_data_expense"]->amount_spent != null) {
+		    	$data[1] = $mydata["view_data_expense"]->amount_spent;
+		    } else {
+		    	$data[1]=0;
+		    }
+
+			$data[2] = $mydata["view_data_income"]->amount_received - $mydata["view_data_expense"]->amount_spent;
+			if($data[2] == null) {
+               $data[2] =0;
+			}
+        	echo json_encode($data);
+      	}
+
+
 
 }
 ?>
