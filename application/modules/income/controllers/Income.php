@@ -126,8 +126,7 @@ array( 'db' => '`income_category`.`category_name`', 'dt' => 4, 'field' => 'categ
 array( 'db' => '`income`.`income_id`', 'dt' => 5, 'field' => 'income_id' ));
 		$joinQuery 	= "FROM income LEFT JOIN `income_category` ON (`income_category`.`income_category_id` = `income`.`category`)
 ";
-		$aminkhan 	= '@banarsiamin@';
-
+		
 		$where = '';
 		if($this->input->get('dateRange')) {
 			$date = explode(' - ', $this->input->get('dateRange'));

@@ -1,5 +1,5 @@
 <!-- start: PAGE CONTENT -->
-	<div class="content-wrapper">
+<div class="content-wrapper">
 		<!-- Main content -->
           <section class="content">
             <?php if($this->session->flashdata("message")){?><div class="alert alert-info" id="successMessage"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><?php echo $this->session->flashdata("message")?></div><?php }?>
@@ -25,8 +25,8 @@
 						</div>
 					</div>
 <table id="example_contribution" class="cell-border example_contribution table table-striped table1 table-bordered table-hover dataTable">
-								  <thead>
-								 	<tr>
+<thead>
+<tr>
 <th><input type="checkbox" class="selAll"></th>
 <th>Member Name</th>
 <th>Year</th>
@@ -69,7 +69,7 @@
 <script type="text/javascript">
 jQuery(document).ready(function($) { 
 	var url = "<?php echo base_url();?>";
-var table = $("#example_contribution").DataTable({
+    var table = $("#example_contribution").DataTable({
   			"dom": 'lfBrtip',
 					  "buttons": ['excel','print'],
         "processing": true,

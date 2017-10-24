@@ -17,7 +17,7 @@ class Monthly_contribution extends CI_Controller {
       */
   	public function index() {   
   		if(CheckPermission("Monthly_contribution", "all_read,own_read")){
-			$data["view_data"]= $this->Monthly_contribution_model->get_data_cat();
+			$data["view_data"]= $this->Monthly_contribution_model->get_data();
 			$this->load->view("include/header");
 			$this->load->view("index",$data);
 			$this->load->view("include/footer");
@@ -32,6 +32,7 @@ class Monthly_contribution extends CI_Controller {
       */
 	public function add_edit() {	
 		$data = $this->input->post();
+		//log_message('debug',print_r($data,TRUE));
 		foreach($_FILES as $name => $fileInfo) {
 			if(!empty($_FILES[$name]['name'])){
 				$filename=$_FILES[$name]['name'];
@@ -61,7 +62,8 @@ class Monthly_contribution extends CI_Controller {
 			unset($data['fileOld']);
 			unset($data['save']);
 			unset($data['id']);
-			$this->Income_model->updateRow('monthly_contribution', 'income_id', $this->input->post('id'), $data);
+
+			$this->Monthly_contribution_model->updateRow('monthly_contribution', 'monthly_contribution_id', $this->input->post('id'), $data);
 			$this->session->set_flashdata('message', 'Your data updated Successfully..');
       		redirect('monthly_contribution');
 		} else { 
@@ -81,6 +83,7 @@ class Monthly_contribution extends CI_Controller {
 	public function get_modal() {
 		if($this->input->post('id')){
 			$data['data']= $this->Monthly_contribution_model->Get_data_id($this->input->post('id'));
+			log_message('debug',print_r($data,TRUE));
       		echo $this->load->view('add_update', $data, true);
 	    } else {
 	      	echo $this->load->view('add_update', '', true);
@@ -98,7 +101,7 @@ class Monthly_contribution extends CI_Controller {
 		foreach ($idsArr as $key => $value) {
 			$this->Monthly_contribution_model->delete_data($value);		
 		}
-		redirect(base_url().'income', 'refresh');
+		redirect(base_url().'monthly_contribution', 'refresh');
   	}
 
   	/**
@@ -108,25 +111,26 @@ class Monthly_contribution extends CI_Controller {
   	public function delete_data($id) { 
 		$this->Monthly_contribution_model->delete_data($id);
 	    $this->session->set_flashdata('message', 'Your data deleted Successfully..');
-	    redirect('income');
+	    redirect('monthly_contribution');
   	}
 
 	/**
       * This function is used to create data for server side datatable
       */
   	public function ajx_data(){
-		$primaryKey = 'income_id';
-		$table 		= 'income';
-		$columns 	= array(
-array( 'db' => '`income`.`income_id`', 'dt' => 0, 'field' => 'income_id' 	 ),
- array( 'db' => '`income`.`date`', 'dt' => 1, 'field' => 'date' ),
- array( 'db' => '`income`.`description`', 'dt' => 2, 'field' => 'description' ),
- array( 'db' => '`income`.`amount`', 'dt' => 3, 'field' => 'amount' ),
-array( 'db' => '`income_category`.`category_name`', 'dt' => 4, 'field' => 'category_name' ),
-array( 'db' => '`income`.`income_id`', 'dt' => 5, 'field' => 'income_id' ));
-		$joinQuery 	= "FROM income LEFT JOIN `income_category` ON (`income_category`.`income_category_id` = `income`.`category`)
-";
-		$aminkhan 	= '@banarsiamin@';
+$primaryKey = 'monthly_contribution_id';
+$table 		= 'monthly_contribution';
+$columns 	= array(
+array( 'db' => '`monthly_contribution`.`monthly_contribution_id`', 'dt' => 0, 'field' => 'monthly_contribution_id'),
+array( 'db' => '`monthly_contribution`.`payment_date`', 'dt' => 1, 'field' => 'payment_date'),
+array( 'db' => '`income`.`income_id`', 'dt' => 2, 'field' => 'income_id' 	 ),
+array( 'db' => '`users`.`user_id`', 'dt' => 3, 'field' => 'user_id' ),
+array( 'db' => '`monthly_contribution`.`date`', 'dt' => 2, 'field' => 'date' ),
+array( 'db' => '`monthly_contribution`.`amount`', 'dt' => 3, 'field' => 'amount' ),
+array( 'db' => '`users`.`name`', 'dt' => 4, 'field' => 'member_name' ),
+array( 'db' => '`income_category`.`income_category_id`', 'dt' => 5, 'field' => 'income_category_id' ));
+		$joinQuery 	= "FROM income LEFT JOIN `income_category` ON (`income_category`.`income_category_id` = `monthly_contribution`.`_name`)";
+		//$aminkhan 	= '@banarsiamin@';
 
 		$where = '';
 		if($this->input->get('dateRange')) {
@@ -181,7 +185,8 @@ array( 'db' => '`income`.`income_id`', 'dt' => 5, 'field' => 'income_id' ));
 			$date = explode(' - ', $this->input->post('dateRange'));
 			$where = " DATE_FORMAT(`monthly_contribution`.`".$this->input->post('colName')."`, '%Y/%m/%d') >= '".date('Y/m/d', strtotime($date[0]))."' AND  DATE_FORMAT(`income`.`".$this->input->post('colName')."`, '%Y/%m/%d') <= '".date('Y/m/d', strtotime($date[1]))."' ";
 		}
-		$data["view_data"]= $this->Monthly_contribution_model->get_data_cat($where);
+		$data["view_data"]= $this->Monthly_contribution_model->get_data($where);
+		log_message('debug',print_r($data,TRUE));
 		echo $this->load->view("tableData",$data, true);
 		die;
   	}

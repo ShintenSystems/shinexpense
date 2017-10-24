@@ -143,14 +143,21 @@
 
 	}
 	
-	function selectBoxDynamic($field_name='', $tableName='setting',$colom='value',$selected='',$attr='')
+	function selectBoxDynamic($field_name='', $tableName='setting',$colom='value',$selected='',$attr='',$isMonthly='')
 	{   
 		$CI = get_instance();
 		$CI->db->select('*');
+		// if($isMonthly = 1){
+		//   $CI->db->where("category_name", 'Monthly Contribution');
+		// } else {
+  //          $CI->db->where("category_name !=", 'Monthly Contribution');
+		// }
 		$CI->db->from($tableName);
 		$query = $CI->db->get();
+
 		if($query->num_rows() > 0) {
 		   $catlog_data = $query->result();
+		   //log_message('debug',print_r($catlog_data,TRUE));
 		   $res = '';
 			$res .='<select class="form-control" id="'.$field_name.'" name="'.$field_name.'" '.$attr.' >';
 				foreach ($catlog_data as $catlogData){ 

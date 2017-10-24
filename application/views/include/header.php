@@ -23,6 +23,11 @@
     <link rel="stylesheet" href="<?php echo base_url('assets/css/dataTables.bootstrap.css');?>">
     <!-- Theme style -->
     <link rel="stylesheet" href="<?php echo base_url('assets/css/AdminLTE.min.css');?>">
+
+    <!-- Theme style -->
+     <link rel="stylesheet" href="<?php echo base_url('assets/vendor/morrisjs/morris.css');?>">
+     <link rel="stylesheet" href="<?php echo base_url('assets/vendor/morrisjs/morris.css');?>">
+    
     <!-- AdminLTE Skins. Choose a skin from the css/skins
     folder instead of downloading all of them to reduce the load. -->
     <link rel="stylesheet" href="<?php echo base_url('assets/css/skins/skin-black-light.min.css');?>">

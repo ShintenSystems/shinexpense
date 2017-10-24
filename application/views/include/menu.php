@@ -26,3 +26,19 @@
 					<li class="<?=($this->router->class==="income_category")?"active":"not-active"?>">
 						<a href="<?php echo base_url("income_category"); ?>"><i class="glyphicon glyphicon-align-right"></i> <span>Income Category</span></a>
 					</li><?php }?>
+
+<?php if(CheckPermission("Notes", "all_read,own_read")){ ?>
+					<li class="<?=($this->router->class==="notes")?"active":"not-active"?>">
+						<a href="<?php echo base_url("notes"); ?>"><i class="glyphicon glyphicon-calendar"></i> <span>Notes</span></a>
+					</li><?php }?>
+
+<?php if(CheckPermission("Notes Category", "all_read,own_read")){ ?>
+					<li class="<?=($this->router->class==="notes_category")?"active":"not-active"?>">
+						<a href="<?php echo base_url("notes_category"); ?>"><i class="glyphicon glyphicon-calendar"></i> <span>Notes Category</span></a>
+					</li><?php }?>
+
+
+<?php if(CheckPermission("Reports", "all_read,own_read")){ ?>
+					<li class="<?=($this->router->class==="reports")?"active":"not-active"?>">
+						<a href="<?php echo base_url("reports"); ?>"><i class="glyphicon glyphicon-calendar"></i> <span>Reports</span></a>
+					</li><?php }?>

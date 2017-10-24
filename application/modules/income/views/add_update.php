@@ -13,12 +13,49 @@
 <input type="number" step="any" placeholder=" Amount" class="form-control" id="amount" name="amount" required value="<?php echo isset($data->amount)?$data->amount:"";?>"  >
 </div>
 <div class="form-group">
-			 		<label for="category">Category </label>
-<?php echo selectBoxDynamic("category","income_category","category_name",isset($data->category) ?$data->category : "");?>
+<label for="category">Category </label>
+<?php echo selectBoxDynamic("category","income_category","category_name",isset($data->category) ?$data->category : "");
+
+?>
 </div>
 </div>
                   <!-- /.box-body -->
                   <div class="box-footer">
-                  	 <input type="submit" value="Save" name="save" class="btn btn-primary btn-color">
-                  </div>
-               </form>
+                  	                               	
+ <input type="submit" value="Save" name="save" id="submitbutton" class="btn btn-primary btn-color"></div>
+ <div  style="color:#ff0023" id="yourmessage"></div>
+
+<script type="text/javascript">
+$(document).ready(function(){
+
+    s = $('select[name="category"]');
+    document.getElementById("submitbutton").onclick = function() {myFunction()};
+
+    function myFunction() {
+       	if(s.val() == 1) {
+
+    		  $("#yourmessage").html("You can not Add/Update Monthly Contribution Here. Go to Monthly Contribution Tab"); 
+    		   document.getElementById("submitbutton").disabled=true; 
+    	} else {
+    		 $("#yourmessage").html(""); 
+    		  document.getElementById("submitbutton").disabled=false; 
+    	}
+
+    }
+    
+    $(s).change(function()
+    {   
+    	if(s.val() == 1) {
+
+    		  $("#yourmessage").html("You can not Add/Update Monthly Contribution Here. Go to Monthly Contribution Tab"); 
+    		   document.getElementById("submitbutton").disabled=true; 
+    	} else {
+    		 $("#yourmessage").html(""); 
+    		  document.getElementById("submitbutton").disabled=false; 
+    	}
+
+    });
+
+ });
+</script>
+</form>

@@ -1,15 +1,15 @@
 <?php 
-			$tablename = "monthly_contribution";
-			$tab_id = $tablename.'_id';
-			if(isset($view_data) && is_array($view_data) && !empty($view_data)) { 
-  foreach ($view_data as $key => $value) {?>
-  <tr>
-<td><input type="checkbox" name="selData" value="<?php echo $value->$tab_id; ?>"></td><td><?php echo $value->date; ?></td>
-<td><?php echo $value->member_name; ?></td>
-<td><?php echo $value->date; ?></td>
-<td><?php echo $value->date; ?></td>
+$tablename = "monthly_contribution";
+$tab_id = $tablename.'_id';
+if(isset($view_data) && is_array($view_data) && !empty($view_data)) { 
+foreach ($view_data as $key => $value) {?>
+<tr>
+<td><input type="checkbox" name="selData" value="<?php echo $value->$tab_id; ?>"></td>
+<td><?php echo $value->name; ?></td>
+<td><?php echo date('Y',strtotime($value->date)); ?></td>
+<td><?php echo date('M',strtotime($value->date)); ?></td>
 <td><?php echo $value->amount; ?></td>
-<td><?php echo $value->date; ?></td>
+<td><?php echo $value->payment_date; ?></td>
 <td><?php echo $value->category_name; ?></td>
 <td><?php 
 	      if(CheckPermission("monthly_contribution", "all_update")){
@@ -31,6 +31,5 @@
 	      } ?>
 	    </td>
 	  </tr>    
-
 	  
-	<?php } } ?>
+<?php } } ?>

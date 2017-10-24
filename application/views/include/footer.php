@@ -42,6 +42,8 @@
 <!-- AdminLTE for demo purposes -->
 <script src="<?php echo base_url('assets/js/demo.js');?>"></script>
 <script src="<?php echo base_url('assets/js/custom.js');?>"></script>
+<script src="<?php echo base_url('assets/vendor/raphael/raphael.min.js');?>"></script>
+<script src="<?php echo base_url('assets/vendor/morrisjs/morris.min.js');?>"></script>
 <script>
 	function validate_fileType(fileName,Nameid,arrayValu)
 	{

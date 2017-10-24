@@ -153,8 +153,9 @@ var table = $("#example_expenses").DataTable({
         locale: {
           format: "DD-MM-YYYY"
         },
-        startDate: "<?php echo $sDate = "01-".date("m-Y"); ?>",
-        endDate: "<?php echo date("d-m-Y", strtotime($sDate. " + 60 day")); ?>"
+        startDate: "<?php echo $sDate = "01-01".date("Y"); ?>",
+        //endDate: "<?php echo date("d-m-Y", strtotime($sDate. " + 60 day")); ?>"
+        endDate: "<?php echo $sDate = "01-12".date("Y"); ?>",
     });
 
 } );

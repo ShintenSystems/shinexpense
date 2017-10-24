@@ -44,29 +44,35 @@
 </div>
 
  <div class='col-sm-3'>
-       <div class="form-group">
+ <div class="form-group">
 <input type="submit" value="Search" id="btnsave" name="save" class="btn btn-primary btn-color">
 </div>
 </div>
 
-   <div class="box-body">
-	    <table id="example_notes" class="cell-border example_notes table table-striped table1 table-bordered table-hover dataTable">
+<div class='col-sm-8'>
+ <div class="form-group">
+<input type="submit" value="Generate Report" id="btnreport" name="btnreport"  class="btn btn-primary btn-color" >
+</div>
+</div>
+
+   <div class="box-body" id ="tabledata">
+	  <table id="example_notes" class="cell-border example_notes table table-striped table1 table-bordered table-hover dataTable"  border="1" cellpadding="1" cellspacing="1" nobr="false">
 		<thead>
-		<tr>
+		<tr bgcolor="#007bff" font color="#fffff">
 		<th>Date</th>
-		<th>Title</th>
 		<th>Description</th>
 		<th>Category Name</th>
-		<th>Deadline</th>
-		<th>Tantou</th>
+		<th>Income</th>
+		<th>Expenses</th>
+    <th>Balance</th>
 	    </tr>
 	    </thead>
-		<tbody>
+		<tbody id="mytable" >
 	     <!-- <?php $this->load->view('tableData'); ?> -->
 	    </tbody> 
 		</table>
     </div>
-</div>
+    </div>
 	  <div id="menu1" class="tab-pane fade">
 	    <h3>Menu 1</h3>
 	    <p>Some content in menu 1.</p>
@@ -88,80 +94,122 @@
 </div>
 
 <script type="text/javascript">
-jQuery(document).ready(function($) {
-	 var start_date = $('#start_date').val();
- 	 var end_date = $('#end_date').val();
- 	 var my_arr = new Array(start_date, end_date);
-     var jsonString = JSON.stringify(my_arr);
-              $.ajax({
-             method : 'post',
-              url: '<?php echo base_url().'reports/get_default_data'; ?>',
-              dataType : "json",
-              data:{data:jsonString},
-             success: function(responce){
-                         // you can alert this responce or print this in any html element
-                         //alert(responce);
-                         //console.log(responce);
-                         //$('tbody').html(responce);
-                         
-                        var tr;
-        				for (var i = 0; i < responce.length; i++) {
-			            tr = $('<tr/>');
-			            tr.append("<td>" + responce[i].date + "</td>");
-			            tr.append("<td>" + responce[i].title + "</td>");
-			            tr.append("<td>" + responce[i].description + "</td>");
-			            tr.append("<td>" + responce[i].category_name + "</td>");
-			            tr.append("<td>" + responce[i].deadline + "</td>");
-			            tr.append("<td>" + responce[i].name + "</td>");
-			            $('tbody').append(tr);
-                        } 
-                 }   
+$(document).ready(function($) {
+	var start_date_selected = '';
+    var end_date_selected = '';
+    populate_date();  
+    //report_data();
+
+    $('#btnreport').click(function() {
+    	var htmldata =  document.getElementById("tabledata").innerHTML;
+        //console.log(htmldata);
+        var htmlstring = JSON.stringify(htmldata);     
+ 
+         $.ajax({
+              method : 'post',
+              url: '<?php echo base_url().'reports/generate_report'; ?>',
+              dataType : "JSON",
+              data:{data:htmlstring},
+              success: function(responce){
+              //console.log(responce);
+              window.open(responce,'_blank');
+              }   
          });
+   	
+    });
+    $('#start_date').change(function () {
+ 	     	 start_date_selected = $('#start_date').val(); 
+              //console.log(start_date_selected);
+ 	});
+
+    $('#end_date').change(function () {
+ 	     	 end_date_selected = $('#end_date').val();
+ 	         //console.log(end_date_selected);
+ 	});
+ 	 
+    
+ 	$('#btnsave').click(function() {
+			//location.reload();
+			populate_date();  
+		
+    });
+
+ 	function populate_date() {
+  	 	 $("#mytable").empty();
+ 	 	   start_date_selected =  $('#start_date').val(); 
+ 	 	   end_date_selected =  $('#end_date').val();
+ 	 		 var my_arr = new Array(start_date_selected, end_date_selected);
+       var jsonString = JSON.stringify(my_arr);
+       $.ajax({
+       method : 'post',
+       url: '<?php echo base_url().'reports/get_default_data'; ?>',
+       dataType : "json",
+       data:{data:jsonString},
+       success: function(responce){
+       var tr;
+       var paymentdate = '00';
+       var startdate = true;
+       var SumIncome = 0;
+       var SumExpense = 0;
+       var Balance =0;
+       var SumBalance = 0;
+       var Yearmonth;
+       //var changedate = '';
+       for (var i = 0; i < responce.length; i++) {
+           if(startdate){
+              startdate = false;
+              paymentdate = responce[i].date.slice(5,7);
+        } else {
+                  if( paymentdate != responce[i].date.slice(5,7)) {
+                   tr = $('<tr/>');
+                   //tr.append("<td >" + 0 + "</td>");
+                   SumBalance = parseInt(SumIncome) - parseInt(SumExpense);
+                   //SumBalance = SumBalance + Balance;
+                  
+                   tr.append("<td colspan='3' bgcolor='#ff9d00' align='right' font size='9'>" + '<h3>Balance as of  '+ Yearmonth + "</h3></td>");
+                   //tr.append("<td>" + 0 + "</td>");
+                   tr.append("<td bgcolor='b5d2dd'><h3>" + SumIncome + "</h3></td>");
+                   tr.append("<td bgcolor='b5d2dd'><h3>" + SumExpense + "</h3></td>");
+                   tr.append("<td bgcolor='b5d2dd'><h3>" + SumBalance + "</h3></td>");
+                   $('tbody').append(tr);
+                   //paymentdate = responce[i].date.slice(5,7); 
+                   startdate = true;
+                   } 
+               }
+               tr = $('<tr/>');
+			         tr.append("<td>" + responce[i].date + "</td>");
+			         tr.append("<td>" + responce[i].description + "</td>");
+			         tr.append("<td>" + responce[i].category_name + "</td>");
+                  
+                  if(responce[i].type == 1) {
+                    tr.append("<td>" + responce[i].amount + "</td>");
+                    tr.append("<td>" + ''  + "</td>");
+                    SumIncome = parseInt(SumIncome) + parseInt(responce[i].amount);
+                  } else {
+                     tr.append("<td>" + '' + "</td>");
+                     tr.append("<td>" + responce[i].amount + "</td>");
+                     SumExpense = parseInt(SumExpense) + parseInt(responce[i].amount);
+                  }
+                   Yearmonth = responce[i].date.slice(0,7);
+			            tr.append("<td>" + '' + "</td>");
+			            $('tbody').append(tr);
+          } 
+          // Last Column
+          tr = $('<tr/>');
+          //tr.append("<td colspan='3' bgcolor='#ff9d00' align='right' font size='9'>" + '<h3>Balance as of  '+ responce[i].date.slice(0,7) + "</h3></td>");
+          tr.append("<td colspan='3' bgcolor='#ff9d00' align='right' font size='9'>" + '<h3>Balance as of  ' + Yearmonth + "</td>");
+          //tr.append("<td>" + 0 + "</td>");
+          //tr.append("<td>" + 0 + "</td>");
+           SumBalance = parseInt(SumIncome) - parseInt(SumExpense);
+          tr.append("<td bgcolor='b5d2dd'><h3>" + SumIncome + "</h3></td>");
+          tr.append("<td bgcolor='b5d2dd'><h3>" + SumExpense + "</h3></td>");
+          tr.append("<td bgcolor='b5d2dd'><h3>" + SumBalance + "</h3></td>");
+          $('tbody').append(tr);
+
+      }  //End Success Loop 
+    });
+ 	} //End Populate Function
 
 });
-( function($) { 
-$(document).ready(function(){
- 	     $('#btnsave').click(function() {
- 	     $('#start_date').change(function () {
- 	     	 var start_date = $('#start_date').val();
-             //console.log(start_date);
- 	     });
-
- 	    $('#end_date').change(function () {
- 	     	 var end_date = $('#end_date').val();
-             //console.log(end_date);
- 	     });
- 	    //populate_data();
- 	     	 var my_arr = new Array(start_date, end_date);
-     var jsonString = JSON.stringify(my_arr);
-              $.ajax({
-             method : 'post',
-              url: '<?php echo base_url().'reports/get_default_data'; ?>',
-              dataType : "json",
-              data:{data:jsonString},
-             success: function(responce){
-                         // you can alert this responce or print this in any html element
-                         //alert(responce);
-                         //console.log(responce);
-                         //$('tbody').html(responce);
-                         
-                        var tr;
-        				for (var i = 0; i < responce.length; i++) {
-			            tr = $('<tr/>');
-			            tr.append("<td>" + responce[i].date + "</td>");
-			            tr.append("<td>" + responce[i].title + "</td>");
-			            tr.append("<td>" + responce[i].description + "</td>");
-			            tr.append("<td>" + responce[i].category_name + "</td>");
-			            tr.append("<td>" + responce[i].deadline + "</td>");
-			            tr.append("<td>" + responce[i].name + "</td>");
-			            $('tbody').append(tr);
-                        } 
-                 }   
-         });
-        });
-
-
-	});
-}) ( jQuery );
 
 </script>

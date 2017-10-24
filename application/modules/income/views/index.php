@@ -67,9 +67,10 @@
 <script type="text/javascript">
 jQuery(document).ready(function($) { 
 	var url = "<?php echo base_url();?>";
+
 var table = $("#example_income").DataTable({
   			"dom": 'lfBrtip',
-					  "buttons": ['excel','print'],
+		    "buttons": ['excel','print'],
         "processing": true,
         "serverSide": false,
 				"sPaginationType": "full_numbers",
@@ -99,6 +100,8 @@ var table = $("#example_income").DataTable({
 				],
 				"order": [[1, 'asc']],
     });
+
+
 		$(".daterange-filter").on("change", function() {
 		  var dateRange = $(this).val();
 		  var colName = "date";
@@ -153,8 +156,9 @@ var table = $("#example_income").DataTable({
         locale: {
           format: "DD-MM-YYYY"
         },
-        startDate: "<?php echo $sDate = "01-".date("m-Y"); ?>",
-        endDate: "<?php echo date("d-m-Y", strtotime($sDate. " + 60 day")); ?>"
+        startDate: "<?php echo $sDate = "01-01".date("Y"); ?>",
+        //endDate: "<?php echo date("d-m-Y", strtotime($sDate. " + 60 day")); ?>"
+        endDate: "<?php echo $sDate = "01-12".date("Y"); ?>",
     });
 
 } );

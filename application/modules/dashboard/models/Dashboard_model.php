@@ -33,6 +33,19 @@ class Dashboard_model extends CI_Model {
 	}
 	
 	/**
+      */
+	public function Get_pending_action_items() {
+		 $this->db->select('COUNT(*) action_item_count');
+		 $this->db->from('Notes');
+		 $except_completed = 7;
+		 $whereClause = 'action_status'.'<'.$except_completed;
+		 $this->db->where($whereClause);
+		 $query = $this->db->get();
+		 return $result = $query->row();
+	}
+
+
+	/**
       * This function is get table data by id
       * @param : $id is value of income_id
       */

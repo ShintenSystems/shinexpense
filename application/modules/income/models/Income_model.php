@@ -5,6 +5,7 @@ class Income_model extends CI_Model {
     parent::__construct();
     $this->load->database();
 		$this->user_id =isset($this->session->get_userdata()['user_details'][0]->id)?$this->session->get_userdata()['user_details'][0]->id:'1';
+	
 	} 
 	
 	/**
@@ -29,6 +30,8 @@ class Income_model extends CI_Model {
 			$sql .= ' WHERE '.$con;	
 		}
 		$qr = $this->db->query($sql);
+		//echo('This is test');
+		//print_r($qr);
 		return $qr->result();
 	}
 
@@ -37,8 +40,10 @@ class Income_model extends CI_Model {
       * @param : $id record id which you want to delete
       */
 	public function delete_data($id='') {
-		$this->db->where('income_id', $id);
-    	$this->db->delete('income');
+		 
+		 //Delete Income Data         
+		 $this->db->where('income_id', $id);
+    	 $this->db->delete('income');
 	}
 
 	/**
@@ -47,8 +52,10 @@ class Income_model extends CI_Model {
       * @param : $data - record array 
       */
 	public function insertRow($table, $data){
-	  	$this->db->insert($table, $data);
+	  	//Insert into Monthly Contribution 
+   	  	$this->db->insert($table, $data);
 	  	return  $this->db->insert_id();
+
 	}
 
 	/**

@@ -20,6 +20,7 @@ class Dashboard extends CI_Controller {
 			$data["view_data_income"]= $this->Dashboard_model->Get_total_received_amt();
 			$data["view_data_expense"]= $this->Dashboard_model->Get_total_spent_amt();
 			$data["view_data_balance"]= $data["view_data_income"]->amount_received - $data["view_data_expense"]->amount_spent;
+			$data["view_data_action_items"]= $this->Dashboard_model->Get_pending_action_items();
 			$this->load->view("include/header");
 			$this->load->view("index",$data);
 			$this->load->view("include/footer");
@@ -33,6 +34,7 @@ class Dashboard extends CI_Controller {
         	//$data['Dashdata']= $this->Dashboard_model->Get_total_received_amt();
   		   	$mydata["view_data_income"]= $this->Dashboard_model->Get_total_received_amt();
 			$mydata["view_data_expense"]= $this->Dashboard_model->Get_total_spent_amt();
+			$mydata["view_data_action_items"]= $this->Dashboard_model->Get_pending_action_items();
 			//$data["view_data_balance"]= $data["view_data_income"]->amount_received - $data["view_data_expense"]->amount_spent;
 
 			if($mydata["view_data_income"]->amount_received != null) {
@@ -51,10 +53,15 @@ class Dashboard extends CI_Controller {
 			if($data[2] == null) {
                $data[2] =0;
 			}
+
+			if($mydata["view_data_action_items"]->action_item_count != null) {
+			$data[3] = $mydata["view_data_action_items"]->action_item_count;
+		    } else {
+		    	$data[3] = 0;
+		    }
+
         	echo json_encode($data);
-      	}
-
-
+    }
 
 }
 ?>
